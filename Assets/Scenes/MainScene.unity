@@ -1132,7 +1132,7 @@ GameObject:
   - component: {fileID: 616401339}
   - component: {fileID: 616401338}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Filter Header
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1179,8 +1179,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Filter
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e9d5f217c16c6c4cb60a8226c0f6ddf, type: 2}
+  m_sharedMaterial: {fileID: -3900045252958146154, guid: 7e9d5f217c16c6c4cb60a8226c0f6ddf,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1214,7 +1215,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 4
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2744,7 +2745,7 @@ GameObject:
   - component: {fileID: 1532181577}
   - component: {fileID: 1532181576}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: Filter Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
