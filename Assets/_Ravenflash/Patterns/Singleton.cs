@@ -17,7 +17,7 @@ namespace Ravenflash.Patterns
 
         protected virtual void Awake()
         {
-            if (Instance != this)
+            if (Instance && Instance != this)
             {
                 Destroy(gameObject);
                 return;
