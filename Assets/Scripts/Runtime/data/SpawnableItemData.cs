@@ -9,7 +9,10 @@ namespace Nomtec.Data
     {
         public string title;
         public Sprite thumbnail;
-        public ISpawnable spawnableItem;
+
+        [SerializeField, InterfaceType(typeof(ISpawnable))]
+        MonoBehaviour _spawnableObject;
+        public ISpawnable SpawnableObject => _spawnableObject as ISpawnable;
 
         
     }

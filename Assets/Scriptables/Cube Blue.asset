@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Blue Cube
   thumbnail: {fileID: 758646140, guid: 71010dccea6536443b95f105bc0e8ba1, type: 3}
+  _spawnableObject: {fileID: 7842514288615310431, guid: b57e8894aa325cf4f8e70c92b3a40395,
+    type: 3}

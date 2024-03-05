@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Red Cube
   thumbnail: {fileID: -1616536741, guid: 71010dccea6536443b95f105bc0e8ba1, type: 3}
+  _spawnableObject: {fileID: 7842514288615310431, guid: d2d493c6e1d1fae4583ff3c04e3b9372,
+    type: 3}

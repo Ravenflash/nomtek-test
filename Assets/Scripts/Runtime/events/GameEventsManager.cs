@@ -26,6 +26,10 @@ namespace Nomtec
         public static void InvokeButtonSelected(ISpawnableButton button) => onButtonSelected?.Invoke(button);
 
 
+        // OBJECTS
+        public static event Action<IEatable> onEatablePlaced, onEatableConsumed;
+        public static void InvokeEateablePlaced(IEatable eatableObject) => onEatablePlaced?.Invoke(eatableObject); 
+        public static void InvokeEatableConsumed(IEatable eatableObject) => onEatableConsumed?.Invoke(eatableObject);
 
     }
 }

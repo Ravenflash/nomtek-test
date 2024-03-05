@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Green Cube
   thumbnail: {fileID: -1191403121, guid: 71010dccea6536443b95f105bc0e8ba1, type: 3}
+  _spawnableObject: {fileID: 7842514288615310431, guid: eb247f3cc00aa7644ae6dafb095249c3,
+    type: 3}

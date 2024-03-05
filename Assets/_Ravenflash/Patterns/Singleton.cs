@@ -9,7 +9,7 @@ namespace Ravenflash.Patterns
         {
             get
             {
-                if (_instance) _instance = FindObjectOfType<T>();
+                if (!_instance) _instance = FindObjectOfType<T>();
                 return _instance;
             }
             private set => _instance = value;
