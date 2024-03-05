@@ -48,6 +48,7 @@ namespace Nomtec.Logic
         {
             if (Raycaster is null) Debug.LogWarning($"{name} is missing a Raycaster reference!");
             InitSelectionMode();
+
         }
 
         private void OnEnable()
@@ -102,7 +103,6 @@ namespace Nomtec.Logic
                 yield return null;
             }
         }
-
 
         private void InitPlacementMode(ISpawnable spawnable)
         {

@@ -16,7 +16,7 @@ namespace Nomtec.View
         [SerializeField] private ItemMenuCollectionData dataCollection;
         [SerializeField] private Transform _layout;
 
-        private List<ISpawnableButton> _spawnableButtons = new List<ISpawnableButton>();
+        public List<ISpawnableButton> SpawnableButtons { get; } = new List<ISpawnableButton>();
 
         private void Start()
         {
@@ -33,27 +33,37 @@ namespace Nomtec.View
             GameEventsManager.onGameStateChanged -= HandleGameStateChanged;
         }
 
+        public void Filter(string searchString)
+        {
+            searchString = searchString.Trim().ToLower();
+
+            foreach (ISpawnableButton btn in SpawnableButtons)
+            {
+                btn.gameObject.SetActive(searchString.Length<=0 || btn.Title.ToLower().Contains(searchString));
+            }
+        }
+
         private void RenderMenu()
         {
             ISpawnableButton btn;
 
             try
             {
-                _spawnableButtons.Clear();
-                foreach (SpawnableItemData itemData in dataCollection.items)
+                SpawnableButtons.Clear();
+                foreach (MenuItemDataEntry<SpawnableObjectData> item in dataCollection.items)
                 {
                     btn = Instantiate(_buttonPrefab, _layout) as ISpawnableButton;
-                    btn.Initialize(itemData);
-                    _spawnableButtons.Add(btn);
+                    btn.Initialize(item.key, item.value);
+                    SpawnableButtons.Add(btn);
                 }
             }
-            catch(Exception e) { Debug.LogException(e); }
+            catch (Exception e) { Debug.LogException(e); }
 
         }
 
         private void SetInteractive(bool status)
         {
-            foreach(ISpawnableButton btn in  _spawnableButtons)
+            foreach (ISpawnableButton btn in SpawnableButtons)
             {
                 btn.SetInteractive(status);
             }

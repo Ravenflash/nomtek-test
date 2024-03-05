@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ff732fc8486914a9ac8e2dead6fefb, type: 3}
+  m_Script: {fileID: 11500000, guid: 35d9409b37ad6e94f8ab920aef8b73f0, type: 3}
   m_Name: Cube Eater
   m_EditorClassIdentifier: 
-  title: Cube Eater
   thumbnail: {fileID: -330581429, guid: 71010dccea6536443b95f105bc0e8ba1, type: 3}
   _spawnableObject: {fileID: -6620005487805606891, guid: a6213543485d09446a2dcc352d99d272,
     type: 3}

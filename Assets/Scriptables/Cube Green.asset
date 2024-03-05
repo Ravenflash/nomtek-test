@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ff732fc8486914a9ac8e2dead6fefb, type: 3}
+  m_Script: {fileID: 11500000, guid: 35d9409b37ad6e94f8ab920aef8b73f0, type: 3}
   m_Name: Cube Green
   m_EditorClassIdentifier: 
-  title: Green Cube
   thumbnail: {fileID: -1191403121, guid: 71010dccea6536443b95f105bc0e8ba1, type: 3}
   _spawnableObject: {fileID: 7842514288615310431, guid: eb247f3cc00aa7644ae6dafb095249c3,
     type: 3}

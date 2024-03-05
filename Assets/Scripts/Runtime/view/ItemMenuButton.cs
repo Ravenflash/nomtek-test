@@ -17,8 +17,8 @@ namespace Nomtec.View
         [SerializeField] TMP_Text _textField;
         TMP_Text TextField { get { if (!_textField) _textField = GetComponentInChildren<TMP_Text>(); return _textField; } }
 
-        public SpawnableItemData Data { get; private set; }
-
+        public string Title { get; private set; }
+        public SpawnableObjectData Data { get; private set; }
 
         private void OnEnable()
         {
@@ -30,11 +30,13 @@ namespace Nomtec.View
             if (Button) Button.onClick.RemoveAllListeners();
         }
 
-        public bool Initialize(SpawnableItemData data)
+        public bool Initialize(string name, SpawnableObjectData data)
         {
             try
             {
-                TextField.text = data.title;
+                Title = name;
+                gameObject.name = name;
+                TextField.text = name;
                 Thumbnail.sprite = data.thumbnail;
                 Data = data;
                 return true;

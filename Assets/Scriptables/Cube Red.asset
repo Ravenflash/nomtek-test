@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ff732fc8486914a9ac8e2dead6fefb, type: 3}
+  m_Script: {fileID: 11500000, guid: 35d9409b37ad6e94f8ab920aef8b73f0, type: 3}
   m_Name: Cube Red
   m_EditorClassIdentifier: 
-  title: Red Cube
   thumbnail: {fileID: -1616536741, guid: 71010dccea6536443b95f105bc0e8ba1, type: 3}
   _spawnableObject: {fileID: 7842514288615310431, guid: d2d493c6e1d1fae4583ff3c04e3b9372,
     type: 3}
