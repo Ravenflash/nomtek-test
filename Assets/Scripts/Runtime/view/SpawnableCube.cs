@@ -45,6 +45,9 @@ namespace Nomtec.View
         {
             try
             {
+                Rigidbody.angularVelocity = Vector3.zero;
+                Rigidbody.velocity = Vector3.zero;
+                transform.rotation = Quaternion.identity;
                 GameManager.Instance.ObjectPools[poolHashCode].ReturnToPool(this);
             }
             catch
