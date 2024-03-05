@@ -2285,7 +2285,7 @@ GameObject:
   - component: {fileID: 2082899975}
   - component: {fileID: 2082899976}
   - component: {fileID: 2082899977}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Cube Despawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
