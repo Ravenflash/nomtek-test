@@ -1,9 +1,11 @@
+using Nomtec.Data;
 using Nomtec.View;
 using Ravenflash.Patterns;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Nomtec.Logic
 {
@@ -43,6 +45,8 @@ namespace Nomtec.Logic
                 GameEventsManager.InvokeGameStateChanged(_state);
             }
         }
+
+        public Dictionary<int, ObjectPool<MonoBehaviour>> ObjectPools { get; } = new Dictionary<int, ObjectPool<MonoBehaviour>>();
 
         private void Start()
         {
@@ -108,6 +112,7 @@ namespace Nomtec.Logic
         {
             // Clean up
             if (_updateCoroutine is object) StopCoroutine(_updateCoroutine);
+
             _selectedItem = spawnable.SpawnCopy();
 
             // Camera Direction
@@ -137,13 +142,11 @@ namespace Nomtec.Logic
         private void HandleEatablePlaced(IEatable eatable)
         {
             EatableObjects.Add(eatable);
-            Debug.Log($"Eatable Placed. Total count: {EatableObjects.Count}");
         }
 
         private void HandleEatableConsumed(IEatable eatable)
         {
             EatableObjects.Remove(eatable);
-            Debug.Log($"Eatable Consumed. Total count: {EatableObjects.Count}");
         }
 
     }

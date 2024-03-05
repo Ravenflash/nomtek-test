@@ -1,3 +1,4 @@
+using Nomtec.Logic;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +7,7 @@ namespace Nomtec.View
 {
     public class SpawnableCube : MonoBehaviour, ISpawnable, IEatable
     {
-
-
+        private int poolHashCode;
         private Rigidbody _rb;
         public Rigidbody Rigidbody { get { if (!_rb) _rb = GetComponent<Rigidbody>(); return _rb; } }
 
@@ -15,13 +15,43 @@ namespace Nomtec.View
 
         public ISpawnable SpawnCopy()
         {
-            ISpawnable copy = Instantiate(this);
+            SpawnableCube copy;
+
+            // Pooling
+            try
+            {
+                int key = GetHashCode();
+
+                ObjectPool<MonoBehaviour> pool;
+                if (!GameManager.Instance.ObjectPools.TryGetValue(key, out pool))
+                {
+                    Debug.Log($"Creating new object pool {name}, key: {key}");
+                    pool = new ObjectPool<MonoBehaviour>(this);
+                    GameManager.Instance.ObjectPools.Add(key, pool);
+                }
+                copy = pool.Get() as SpawnableCube;
+                copy.poolHashCode = key;
+            }
+            catch
+            {
+                copy = Instantiate(this);
+            }
+
             copy.Rigidbody.isKinematic = true;
             return copy;
         }
+
         public void Despawn()
         {
-            Destroy(gameObject);
+            try
+            {
+                GameManager.Instance.ObjectPools[poolHashCode].ReturnToPool(this);
+            }
+            catch
+            {
+                Destroy(gameObject);
+            }
+
         }
 
         public void Place(Vector3 spawnPoint)
