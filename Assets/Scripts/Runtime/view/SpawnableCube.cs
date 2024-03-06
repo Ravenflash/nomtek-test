@@ -1,17 +1,21 @@
 using Nomtec.Logic;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 namespace Nomtec.View
 {
     public class SpawnableCube : MonoBehaviour, ISpawnable, IEatable
     {
-        private int poolHashCode;
+        private int poolKey;
         private Rigidbody _rb;
         public Rigidbody Rigidbody { get { if (!_rb) _rb = GetComponent<Rigidbody>(); return _rb; } }
 
         public bool isConsumed { get; private set; } = false;
+
+        IObjectPoolManager<MonoBehaviour> PoolManager => AppManager.Instance.Game.PoolManager;
 
         public ISpawnable SpawnCopy()
         {
@@ -20,24 +24,23 @@ namespace Nomtec.View
             // Pooling
             try
             {
-                int key = GetHashCode();
-
-                ObjectPool<MonoBehaviour> pool;
-                if (!GameManager.Instance.ObjectPools.TryGetValue(key, out pool))
-                {
-                    Debug.Log($"Creating new object pool {name}, key: {key}");
-                    pool = new ObjectPool<MonoBehaviour>(this);
-                    GameManager.Instance.ObjectPools.Add(key, pool);
-                }
-                copy = pool.Get() as SpawnableCube;
-                copy.poolHashCode = key;
+                copy = PoolManager.GetObject(this) as SpawnableCube;
+                copy.poolKey = GetHashCode();
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogException(e);
                 copy = Instantiate(this);
             }
 
-            copy.Rigidbody.isKinematic = true;
+            // Default Configuration
+            try
+            {
+                copy.Rigidbody.isKinematic = true;
+                copy.transform.rotation = Quaternion.identity;
+            }
+            catch (Exception e) { Debug.LogException(e); }
+
             return copy;
         }
 
@@ -48,7 +51,8 @@ namespace Nomtec.View
                 Rigidbody.angularVelocity = Vector3.zero;
                 Rigidbody.velocity = Vector3.zero;
                 transform.rotation = Quaternion.identity;
-                GameManager.Instance.ObjectPools[poolHashCode].ReturnToPool(this);
+
+                if (!PoolManager.ReturnToPool(poolKey, this)) Destroy(gameObject);
             }
             catch
             {

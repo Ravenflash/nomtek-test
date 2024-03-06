@@ -20,6 +20,7 @@ namespace Nomtec
         private CubeConsumer CubeConsumer { get { if (!_consumer) _consumer = GetComponentInChildren<CubeConsumer>(); return _consumer; } }
 
 
+        List<IEatable> EatableObjects => AppManager.Instance.Game.EatableObjects;
 
         private void Start()
         {
@@ -62,7 +63,7 @@ namespace Nomtec
             eatableTarget = GetNearestEatable(eatableTarget);
             Vector3 delta, direction;
 
-            while (GameManager.Instance.EatableObjects.Count > 0)
+            while (EatableObjects.Count > 0)
             {
                 if (eatableTarget.isConsumed) eatableTarget = GetNearestEatable();
 
@@ -78,25 +79,29 @@ namespace Nomtec
 
         private IEatable GetNearestEatable(IEatable currentTarget = null)
         {
-            if (GameManager.Instance.EatableObjects.Count <= 0) return null;
-
-            IEatable result = currentTarget is null || currentTarget.isConsumed ? GameManager.Instance.EatableObjects[0] : currentTarget;
-            float min_distance = Vector3.Distance(result.transform.position, transform.position);
-            float distance;
-
-            foreach (IEatable item in GameManager.Instance.EatableObjects)
+            try
             {
-                if (item == result) continue;
+                if (EatableObjects.Count <= 0) return null;
 
-                distance = Vector3.Distance(item.transform.position, transform.position);
-                if (distance < min_distance)
+                IEatable result = currentTarget is null || currentTarget.isConsumed ? EatableObjects[0] : currentTarget;
+                float min_distance = Vector3.Distance(result.transform.position, transform.position);
+                float distance;
+
+                foreach (IEatable item in EatableObjects)
                 {
-                    min_distance = distance;
-                    result = item;
-                }
-            }
+                    if (item == result) continue;
 
-            return result;
+                    distance = Vector3.Distance(item.transform.position, transform.position);
+                    if (distance < min_distance)
+                    {
+                        min_distance = distance;
+                        result = item;
+                    }
+                }
+
+                return result;
+            }
+            catch { return null; }
         }
 
         private void HandleEatablePlaced(IEatable eatable)

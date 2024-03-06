@@ -11,7 +11,7 @@ namespace Nomtec.Logic
 {
     public enum GameState { Selection, Placement }
 
-    public class GameManager : Singleton<GameManager>
+    public class GameManager : MonoBehaviour, IGameManager
     {
         private GameState _state = GameState.Selection;
 
@@ -46,7 +46,7 @@ namespace Nomtec.Logic
             }
         }
 
-        public Dictionary<int, ObjectPool<MonoBehaviour>> ObjectPools { get; } = new Dictionary<int, ObjectPool<MonoBehaviour>>();
+        public IObjectPoolManager<MonoBehaviour> PoolManager { get; set; } = new ObjectPoolManager<MonoBehaviour>();
 
         private void Start()
         {
@@ -73,7 +73,9 @@ namespace Nomtec.Logic
         {
             while (this && State == GameState.Placement)
             {
-                //Nothing to do here so far
+                // Nothing to do here so far
+                // Left for future implementation
+                // Remove this Coroutine if not needed
                 yield return null;
             }
         }
