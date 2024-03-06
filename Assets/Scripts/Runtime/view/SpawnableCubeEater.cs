@@ -59,6 +59,7 @@ namespace Nomtec
             if (!transform) yield break;
 
             if (CubeConsumer) CubeConsumer.consumeOnCollision = true;
+            Vector3 planeVector = new Vector3(1f, 0, 1f);
 
             eatableTarget = GetNearestEatable(eatableTarget);
             Vector3 delta, direction;
@@ -68,7 +69,7 @@ namespace Nomtec
                 if (eatableTarget.isConsumed) eatableTarget = GetNearestEatable();
 
                 delta = eatableTarget.transform.position - Rigidbody.position;
-                direction = delta.normalized;
+                direction = Vector3.Scale(delta, planeVector).normalized;
 
                 Rigidbody.MovePosition(transform.forward * moveSpeed * Time.fixedDeltaTime + Rigidbody.position);
                 Rigidbody.MoveRotation(Quaternion.RotateTowards(Rigidbody.rotation, Quaternion.LookRotation(direction, Vector3.up), rotationSpeed * Time.fixedDeltaTime));
