@@ -18,7 +18,20 @@ namespace Nomtec.Logic
         private ISpawnable _selectedItem;
         private Coroutine _updateCoroutine;
 
+        #region Properties
         public List<IEatable> EatableObjects { get; private set; } = new List<IEatable>();
+
+        [SerializeField, InterfaceType(typeof(IInputController))]
+        private MonoBehaviour _inputController;
+        private IInputController InputController
+        {
+            get
+            {
+                if (_inputController is null) _inputController = GetComponentInChildren<IInputController>() as MonoBehaviour;
+                if (_inputController is null) _inputController = gameObject.AddComponent<PlayerInputController>();
+                return _inputController as IInputController;
+            }
+        }
 
         [SerializeField, InterfaceType(typeof(IRaycaster))]
         private MonoBehaviour _raycaster;
@@ -47,7 +60,9 @@ namespace Nomtec.Logic
         }
 
         public IObjectPoolManager<MonoBehaviour> PoolManager { get; set; } = new ObjectPoolManager<MonoBehaviour>();
+        #endregion
 
+        #region Unity Methods
         private void Start()
         {
             if (Raycaster is null) Debug.LogWarning($"{name} is missing a Raycaster reference!");
@@ -69,55 +84,24 @@ namespace Nomtec.Logic
             GameEventsManager.onEatableConsumed -= HandleEatableConsumed;
         }
 
-        IEnumerator SelectionUpdate()
+        private void OnDestroy()
         {
-            while (this && State == GameState.Placement)
-            {
-                // Nothing to do here so far
-                // Left for future implementation
-                // Remove this Coroutine if not needed
-                yield return null;
-            }
+            ExitPlacementMode();
         }
+        #endregion
 
-        IEnumerator PlacementUpdate()
-        {
-            Vector3 newPosition;
-            bool isValidPosition;
-
-            Raycaster.HitTest(out newPosition);
-            _selectedItem.transform.position = newPosition;
-
-            while (this && _selectedItem is object && State == GameState.Placement)
-            {
-                if (Input.GetKeyUp(KeyCode.Escape))
-                {
-                    InitSelectionMode();
-                    yield break;
-                }
-                isValidPosition = Raycaster.HitTest(out newPosition);
-                _selectedItem.Rigidbody.position = newPosition;
-
-                if (isValidPosition && Input.GetMouseButtonDown(0))
-                {
-                    _selectedItem.Place(newPosition);
-                    _selectedItem = null;
-                    InitSelectionMode();
-                    yield break;
-                }
-
-                yield return null;
-            }
-        }
-
+        #region Placement Mode
         private void InitPlacementMode(ISpawnable spawnable)
         {
             // Clean up
             if (_updateCoroutine is object) StopCoroutine(_updateCoroutine);
 
-            _selectedItem = spawnable.SpawnCopy();
+            //Events
+            InputController.onCancel += HandlePlacementCancel;
+            InputController.onClick += HandlePlacementClick;
 
-            // Camera Direction
+            // Spawn object
+            _selectedItem = spawnable.SpawnCopy();
             _selectedItem.transform.forward = Vector3.back;
 
             // New state
@@ -125,6 +109,54 @@ namespace Nomtec.Logic
             _updateCoroutine = StartCoroutine(PlacementUpdate());
         }
 
+        private IEnumerator PlacementUpdate()
+        {
+            Vector3 newPosition;
+
+            Raycaster.HitTest(out newPosition);
+            _selectedItem.transform.position = newPosition;
+
+            while (this && _selectedItem is object && State == GameState.Placement)
+            {
+                Raycaster.HitTest(out newPosition);
+                _selectedItem.Rigidbody.position = newPosition;
+
+                yield return null;
+            }
+        }
+
+        private void HandlePlacementClick()
+        {
+            if (State != GameState.Placement) return;
+            if (_selectedItem is null) return;
+
+            Vector3 clickPosition;
+            if(Raycaster.HitTest(out clickPosition))
+            {
+                _selectedItem.Place(clickPosition);
+                _selectedItem = null;
+                ExitPlacementMode();
+                InitSelectionMode();
+            }
+        }
+
+        private void HandlePlacementCancel()
+        {
+            ExitPlacementMode();
+            InitSelectionMode();
+        }
+
+        private void ExitPlacementMode()
+        {
+            if(State != GameState.Placement) return;
+
+            StopCoroutine(_updateCoroutine);
+            InputController.onCancel -= HandlePlacementCancel;
+            InputController.onClick -= HandlePlacementClick;
+        }
+        #endregion
+
+        #region Selection Mode
         private void InitSelectionMode()
         {
             // Clean up
@@ -136,6 +168,19 @@ namespace Nomtec.Logic
             _updateCoroutine = StartCoroutine(SelectionUpdate());
         }
 
+        private IEnumerator SelectionUpdate()
+        {
+            while (this && State == GameState.Placement)
+            {
+                // Nothing to do here so far
+                // Left for future implementation
+                // Remove this Coroutine if not needed
+                yield return null;
+            }
+        }
+        #endregion
+
+        #region Other Event Handlers
         private void HandleButtonSelected(ISpawnableButton button)
         {
             InitPlacementMode(button.Data.SpawnableObject);
@@ -150,6 +195,7 @@ namespace Nomtec.Logic
         {
             EatableObjects.Remove(eatable);
         }
+        #endregion
 
     }
 }
